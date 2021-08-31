@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Soal 1</title>
+</head>
+<body>
+	<input type="text" name="integer" id="integer">
+	<button type="button" id="btn-hitung">Hitung</button>
+<br>
+	<div id="result">
+		
+	</div>
+	<script>
+		document.getElementById("btn-hitung").onclick = function(){
+			let input = document.getElementById("integer").value;
+			let arrInput = input.split(",");
+			let nowValue = "";
+			let arrParts = [];
+			let arrTemp = [];
+			let arrResult = [];
+
+			arrInput.forEach(myFunction);
+			calculate()
+
+			function myFunction(item, index) {
+				if (nowValue == "" || (parseInt(item) > parseInt(nowValue))) {
+					arrTemp.push(item)
+				} else {
+					arrParts.push(arrTemp)
+					arrTemp = []
+					arrTemp.push(parseInt(item))
+				}
+
+				if (index == (arrInput.length - 1)) {
+					arrParts.push(arrTemp)
+					arrTemp = []
+				}
+				nowValue = parseInt(item);
+			}
+
+			function calculate(){
+				for (var i = 0; i < arrParts.length; i++) {
+					const reducer = (accumulator, curr) => parseInt(accumulator) + parseInt(curr);
+					const sum = arrParts[i].reduce(reducer);
+					const mean = sum / arrParts[i].length;
+					let median = "";
+					let calMid = arrParts[i].length / 2;
+
+					let index = 0;
+					if (Number.isInteger(calMid)) {
+						calMid = calMid - 1;
+						index = calMid+1;
+						median = ((parseInt(arrParts[i][calMid]) + parseInt(arrParts[i][index])) / 2);
+					} else {
+						index = Math.floor(calMid);
+						median = parseInt(arrParts[i][index]);
+					}
+					let results = {mean: mean, median: median};
+					arrResult.push(results);
+				}
+			}
+			// console.log(arrResult);
+
+			let output = [];
+			convert()
+			function convert(){
+				const input = JSON.parse(document.getElementById("integer").value)
+				for (var i = 0; i < input.length; i++) {
+					let toUsd = "";
+					fetch('https://api.frankfurter.app/latest?amount='+input[i].amount+'&from='+input[i].currency+'&to=USD')
+					  .then(resp => resp.json())
+					  .then((data) => {
+					  	toUsd = data.rates.USD;
+					  	output.push(toUsd);
+					  });
+				}
+				console.log(output)
+			}
+		}
+	</script>
+</body>
+</html>

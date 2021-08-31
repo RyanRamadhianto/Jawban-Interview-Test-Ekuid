@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Soal 1</title>
+</head>
+<body>
+	<input type="text" name="integer" id="integer">
+	<button type="button" id="btn-hitung">Hitung</button>
+<br>
+	<div id="result">
+		
+	</div>
+	<script>
+			let output = [];
+			convert()
+			function convert(){
+				const input = JSON.parse(document.getElementById("integer").value)
+				for (var i = 0; i < input.length; i++) {
+					let toUsd = "";
+					fetch('https://api.frankfurter.app/latest?amount='+input[i].amount+'&from='+input[i].currency+'&to=USD')
+					  .then(resp => resp.json())
+					  .then((data) => {
+					  	toUsd = data.rates.USD;
+					  	output.push(toUsd);
+					  });
+				}
+				console.log(output)
+			}
+
+	</script>
+</body>
+</html>
