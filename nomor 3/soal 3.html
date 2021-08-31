@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Soal 1</title>
+</head>
+<body>
+	<input type="text" name="duit" id="duit" placeholder="Duit, lembar">
+	<button type="button" id="btn-duit">Hitung Duit</button>
+	<div id="result">
+		
+	</div>
+	<script>
+		//listener jika tombol Hitung Duit di click
+		document.getElementById("btn-duit").onclick = function(){
+			//define pecahan2
+			const pecahan = [1000, 2000, 5000, 10000, 20000, 50000, 100000];
+
+			//get inputan
+			let input = document.getElementById("duit").value;
+
+			//split input menjadi array dengan pemisah tanda ","
+			let arrInput = input.split(",");
+
+			let belanja = parseInt(arrInput[0]);
+			let lembar = parseInt(arrInput[1]);
+
+			//asumsi adalah angka aktual untuk setiap lembar. ex 17000,2 = 8500(asumsi)
+			let asumsi = belanja / lembar;
+
+			//looping -> melakukan pengurangan antara setiap pecahan yg ada dengan asumsi dan ditampung ke dalam array "temp"
+			let temp = []
+			for (var i = 0; i < pecahan.length; i++) {
+				const key = pecahan[i];
+				temp.push({value: pecahan[i] - asumsi, pecahan: pecahan[i]})
+			}
+
+			//menyortir array temp dari yg paling kecil
+			temp.sort(function (a, b) {
+			 	return a.value - b.value;
+			});
+
+			//mengambil pecahan final
+			for (var i = 0; i < temp.length; i++) {
+				if (temp[i].value > 0) {
+					console.log(temp[i].pecahan)
+					return false
+				}
+			}
+		}
+	</script>
+</body>
+</html>
